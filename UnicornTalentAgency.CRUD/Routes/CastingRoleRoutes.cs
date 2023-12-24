@@ -87,26 +87,38 @@ public static class CastingRoleRoutes
 
     private static Task<CastingRoleArchiveDto[]> GetCastingRoles(
         [FromServices] UTADbContext dbContext, CancellationToken cancellationToken = default)
-        => dbContext.Roles.Select(r => new CastingRoleArchiveDto(
-            r.Id,
-            r.Name,
-            r.When
-        )).ToArrayAsync(cancellationToken);
+            => dbContext.Roles
+            .AsNoTracking()
+            .Select(r => new CastingRoleArchiveDto(
+                r.Id,
+                r.Name,
+                r.When
+            )).ToArrayAsync(cancellationToken);
 
     private static async Task<CastingRoleDetailsDto?> GetCastingRole(
         int id,
         [FromServices] UTADbContext dbContext,
         CancellationToken cancellationToken = default)
     {
-        var entity = await dbContext.Roles.FindAsync(id, cancellationToken);
-        if (entity is null) return null;
+        var entity = await dbContext
+            .Roles
+            .Include(r => r.Auditions)
+            .ThenInclude(a => a.Unicorn)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+        if (entity is null) 
+            return null;
+
+        var selectedUnicorn = entity.Auditions
+            .FirstOrDefault(a => a.IsSuccessful);
         return new CastingRoleDetailsDto(
             entity.Id,
             entity.Name,
             entity.Description,
             entity.Location,
             entity.Pay,
-            entity.When
+            entity.When,
+            selectedUnicorn?.Unicorn.Name ?? "No unicorn selected"
         );
     }
 }

@@ -1,3 +1,3 @@
 namespace UnicornTalentAgency.CRUD.Routes;
 
-public record UnicornArchiveDto(int Id, string Name);
+public record UnicornArchiveDto(int Id, string Name, int TotalPay);

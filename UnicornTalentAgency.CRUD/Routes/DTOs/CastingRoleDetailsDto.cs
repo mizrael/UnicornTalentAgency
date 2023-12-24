@@ -6,5 +6,6 @@ public record CastingRoleDetailsDto(
     string Description,
     string Location,
     int Pay,
-    DateTimeOffset When
+    DateTimeOffset When,
+    string SelectedUnicornName
 );
