@@ -10,13 +10,9 @@ public static class UnicornRoutes
     {
         var api = app.MapGroup("/api/v1/unicorns");
 
-        api.MapGet("/", GetUnicorns)
-            .WithName(nameof(GetUnicorns))
-            .WithOpenApi();
+        api.MapGet("/", GetUnicorns);
 
-        api.MapGet("/{id}", GetUnicorn)
-            .WithName(nameof(GetUnicorn))
-            .WithOpenApi();
+        api.MapGet("/{id}", GetUnicorn);
 
         return app;
     }

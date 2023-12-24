@@ -8,5 +8,5 @@ public record Audition
     public required int RoleId { get; init; }
     public required CastingRole Role { get; init; }
     
-    public bool IsSuccessful { get; init; }
+    public bool IsSuccessful { get; set; }
 }
