@@ -1,0 +1,11 @@
+bin/
+debug/
+release/
+obj/
+.vs/
+BenchmarkDotNet.Artifacts/
+publish/
+.DS_Store
+volumes/
+.fake
+.csproj.user
