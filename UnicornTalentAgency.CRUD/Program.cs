@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapUnicornRoutes()
-    .MapCastingCallRoutes();
+    .MapCastingRoleRoutes();
 
 await DbSeeder.SeedAsync(app);
 

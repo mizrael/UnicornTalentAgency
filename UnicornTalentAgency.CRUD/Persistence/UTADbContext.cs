@@ -14,7 +14,7 @@ public class UTADbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Audition>()
-            .HasKey(a => new { a.CastingCallId, a.UnicornId });
+            .HasKey(a => new { a.RoleId, a.UnicornId });
 
         base.OnModelCreating(modelBuilder);
     }
