@@ -26,7 +26,7 @@ app.UseHttpsRedirection();
 
 app.MapUnicornRoutes()
     .MapCastingRoleRoutes();
-
-await DbSeeder.SeedAsync(app);
-
+    
 app.Run();
+
+public partial class Program {}

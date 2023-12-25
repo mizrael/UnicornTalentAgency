@@ -8,7 +8,7 @@ public static class UnicornRoutes
 {
     public static WebApplication MapUnicornRoutes(this WebApplication app)
     {
-        var api = app.MapGroup("/api/v1/unicorns");
+        var api = app.MapGroup("/api/unicorns");
 
         api.MapGet("/", GetUnicorns);
 

@@ -1,20 +1,19 @@
+using Microsoft.Extensions.DependencyInjection;
 using UnicornTalentAgency.CRUD.Persistence;
 using UnicornTalentAgency.CRUD.Persistence.Entities;
 
 internal static class DbSeeder
 {
-    public static async ValueTask SeedAsync(WebApplication app)
+    public static async ValueTask SeedAsync(IServiceProvider services)
     {
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-            var dbContext = services.GetRequiredService<UTADbContext>();
-            
-            AddUnicorns(dbContext);
-            AddRoles(dbContext);
+        using var scope = services.CreateScope();
 
-            await dbContext.SaveChangesAsync();
-        }
+        var dbContext = scope.ServiceProvider.GetRequiredService<UTADbContext>();
+
+        AddUnicorns(dbContext);
+        AddRoles(dbContext);
+
+        await dbContext.SaveChangesAsync();
     }
 
     private static void AddRoles(UTADbContext dbContext)
@@ -66,7 +65,7 @@ internal static class DbSeeder
 
     private static void AddUnicorns(UTADbContext dbContext)
     {
-        dbContext.AddRange(new []
+        dbContext.AddRange(new[]
         {
             new Unicorn()
             {

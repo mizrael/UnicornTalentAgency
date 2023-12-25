@@ -9,7 +9,7 @@ public static class CastingRoleRoutes
 {
     public static WebApplication MapCastingRoleRoutes(this WebApplication app)
     {
-        var api = app.MapGroup("/api/v1/roles");
+        var api = app.MapGroup("/api/roles");
 
         api.MapGet("/", GetCastingRoles);
 
