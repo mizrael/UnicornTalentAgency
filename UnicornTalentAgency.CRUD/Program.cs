@@ -10,8 +10,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContextPool<UTADbContext>(options =>
-    options.UseInMemoryDatabase("unicorns")
-);
+{
+    var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
+    options.UseInMemoryDatabase(dbName);
+});
 
 var app = builder.Build();
 
@@ -26,7 +28,7 @@ app.UseHttpsRedirection();
 
 app.MapUnicornRoutes()
     .MapCastingRoleRoutes();
-    
+
 app.Run();
 
-public partial class Program {}
+public partial class Program { }

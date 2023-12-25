@@ -1,7 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UnicornTalentAgency.CRUD.Persistence;
-using UnicornTalentAgency.CRUD.Persistence.Entities;
 
 namespace UnicornTalentAgency.CRUD.Routes;
 
@@ -22,7 +22,7 @@ public static class CastingRoleRoutes
         return app;
     }
 
-    private static async Task<IActionResult> SelectUnicorn(
+    private static async Task<Results<NotFound<string>, BadRequest<string>, Ok>> SelectUnicorn(
         int id,
         int unicornId,
         [FromServices] UTADbContext dbContext,
@@ -32,47 +32,49 @@ public static class CastingRoleRoutes
             .Include(r => r.Auditions)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
         if (role is null)
-            return new NotFoundObjectResult($"Role {id} does not exist.");
+            return TypedResults.NotFound($"Role {id} does not exist.");
+
         var unicorn = await dbContext.Unicorns
-            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == unicornId, cancellationToken);
         if (unicorn is null)
-            return new NotFoundObjectResult($"Unicorn {unicornId} does not exist.");
+            return TypedResults.NotFound($"Unicorn {unicornId} does not exist.");
 
         if (role.Auditions.Any(a => a.UnicornId != unicornId && a.IsSuccessful))
-            return new ConflictObjectResult("Another unicorn has already been selected for this role.");
+            return TypedResults.BadRequest("Another unicorn has already been selected for this role.");
 
         var audition = role.Auditions.FirstOrDefault(a => a.UnicornId == unicornId);
         if (audition is null)
-            return new NotFoundObjectResult($"Unicorn {unicornId} has not auditioned for role {id}.");
+            return TypedResults.BadRequest($"Unicorn {unicornId} has not auditioned for role {id}.");
 
         audition.IsSuccessful = true;
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new AcceptedResult();
+        return TypedResults.Ok();
     }
 
-    private static async Task<IActionResult> Audition(
+    private static async Task<Results<NotFound<string>, BadRequest<string>, Ok>> Audition(
         int id,
         int unicornId,
         [FromServices] UTADbContext dbContext,
         CancellationToken cancellationToken = default)
     {
-        var role = await dbContext.Roles
+       var role = await dbContext.Roles
             .Include(r => r.Auditions)
             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
         if (role is null)
-            return new NotFoundObjectResult($"Role {id} does not exist.");
+            return TypedResults.NotFound($"Role {id} does not exist.");
+
         var unicorn = await dbContext.Unicorns
-            .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Id == unicornId, cancellationToken);
         if (unicorn is null)
-            return new NotFoundObjectResult($"Unicorn {unicornId} does not exist.");
+            return TypedResults.NotFound($"Unicorn {unicornId} does not exist.");
 
         if (role.Auditions.Any(a => a.UnicornId != unicornId && a.IsSuccessful))
-            return new ConflictObjectResult("Another unicorn has already been selected for this role.");
+            return TypedResults.BadRequest("Another unicorn has already been selected for this role.");
 
         if (!role.Auditions.Any(a => a.UnicornId == unicornId))
         {
-            role.Auditions.Add(new Audition()
+            role.Auditions.Add(new Persistence.Entities.Audition()
             {
                 UnicornId = unicornId,
                 Unicorn = unicorn,
@@ -82,7 +84,7 @@ public static class CastingRoleRoutes
             await dbContext.SaveChangesAsync(cancellationToken);
         }
         
-        return new OkResult();
+        return TypedResults.Ok();
     }
 
     private static Task<CastingRoleArchiveDto[]> GetCastingRoles(
@@ -106,7 +108,7 @@ public static class CastingRoleRoutes
             .ThenInclude(a => a.Unicorn)
             .AsNoTracking()
             .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
-        if (entity is null) 
+        if (entity is null)
             return null;
 
         var selectedUnicorn = entity.Auditions

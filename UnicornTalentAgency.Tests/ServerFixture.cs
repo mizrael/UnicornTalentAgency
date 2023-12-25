@@ -1,14 +1,16 @@
+using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace UnicornTalentAgency.Tests;
 
 public class ServerFixture : IAsyncLifetime
 {
-    private readonly List<IDisposable> _instances = new();
+    private readonly List<IAsyncDisposable> _instances = new();
 
     public async Task<WebApplicationFactory<Program>> CreateServerAsync()
     {
         var application = new WebApplicationFactory<Program>();
+
         await DbSeeder.SeedAsync(application.Services);
 
         _instances.Add(application);
@@ -18,12 +20,10 @@ public class ServerFixture : IAsyncLifetime
     public Task InitializeAsync()
     => Task.CompletedTask;
 
-    public Task DisposeAsync()
+    public async Task DisposeAsync()
     {
-        foreach (var instance in _instances)
-            instance.Dispose();
-        _instances.Clear();
+        await Task.WhenAll(_instances.Select(i => i.DisposeAsync().AsTask()));
 
-        return Task.CompletedTask;
+        _instances.Clear();
     }
 }

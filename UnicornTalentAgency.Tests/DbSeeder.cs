@@ -1,12 +1,18 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UnicornTalentAgency.CRUD.Persistence;
 using UnicornTalentAgency.CRUD.Persistence.Entities;
+
+namespace UnicornTalentAgency.Tests;
 
 internal static class DbSeeder
 {
     public static async ValueTask SeedAsync(IServiceProvider services)
     {
         using var scope = services.CreateScope();
+
+        var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        config["dbName"] = Guid.NewGuid().ToString();
 
         var dbContext = scope.ServiceProvider.GetRequiredService<UTADbContext>();
 
