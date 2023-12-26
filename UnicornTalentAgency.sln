@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnicornTalentAgency.CRUD", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnicornTalentAgency.Tests", "UnicornTalentAgency.Tests\UnicornTalentAgency.Tests.csproj", "{0AA64718-3E62-464F-8FD7-956F2FA4CD19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnicornTalentAgency.CQRS", "UnicornTalentAgency.CQRS\UnicornTalentAgency.CQRS.csproj", "{2DE91599-F6FA-42BD-B086-BD0E3AB16291}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{0AA64718-3E62-464F-8FD7-956F2FA4CD19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AA64718-3E62-464F-8FD7-956F2FA4CD19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AA64718-3E62-464F-8FD7-956F2FA4CD19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DE91599-F6FA-42BD-B086-BD0E3AB16291}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DE91599-F6FA-42BD-B086-BD0E3AB16291}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DE91599-F6FA-42BD-B086-BD0E3AB16291}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DE91599-F6FA-42BD-B086-BD0E3AB16291}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

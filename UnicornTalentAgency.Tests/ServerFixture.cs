@@ -1,23 +1,50 @@
 using Microsoft.AspNetCore.Mvc.Testing;
 
+using Microsoft.Extensions.Configuration;
+
 namespace UnicornTalentAgency.Tests;
 
 public class ServerFixture : IAsyncLifetime
 {
     private readonly List<IAsyncDisposable> _instances = new();
+    private bool _isCQRS = false;
 
-    public async Task<WebApplicationFactory<Program>> CreateServerAsync()
+    public Task<HttpClient> CreateClientAsync()
     {
-        var application = new WebApplicationFactory<Program>();
+        return _isCQRS ?
+            CreateClientCoreAsync<CQRS.Program>() :
+            CreateClientCoreAsync<CRUD.Program>();
+    }
+
+    private async Task<HttpClient> CreateClientCoreAsync<T>()
+        where T : class
+    {
+        var application = await CreateServer<T>();
+
+        return application.CreateClient();
+    }
+
+    private async Task<WebApplicationFactory<T>> CreateServer<T>()
+        where T : class
+    {
+        var application = new WebApplicationFactory<T>();
+        _instances.Add(application);
 
         await DbSeeder.SeedAsync(application.Services);
 
-        _instances.Add(application);
         return application;
     }
 
     public Task InitializeAsync()
-    => Task.CompletedTask;
+    {
+        var config = new ConfigurationBuilder()
+            .AddJsonFile("testsettings.json", optional: false)
+            .Build();
+
+        _isCQRS = config.GetValue<bool>("IsCQRS");
+
+        return Task.CompletedTask;
+    }
 
     public async Task DisposeAsync()
     {

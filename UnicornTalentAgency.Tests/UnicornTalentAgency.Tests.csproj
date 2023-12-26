@@ -27,6 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UnicornTalentAgency.CRUD\UnicornTalentAgency.CRUD.csproj" />
+    <ProjectReference Include="..\UnicornTalentAgency.CQRS\UnicornTalentAgency.CQRS.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+	  <Content Include="testsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 
 </Project>

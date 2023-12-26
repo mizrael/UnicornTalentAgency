@@ -1,0 +1,6 @@
+@UnicornTalentAgency.CQRS_HostAddress = http://localhost:5023
+
+GET {{UnicornTalentAgency.CQRS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

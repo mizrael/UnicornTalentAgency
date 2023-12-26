@@ -12,8 +12,7 @@ public class UnicornRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task GetUnicorns_should_return_archive()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var results = await client.GetFromJsonAsync<IEnumerable<dynamic>>("api/unicorns");
         results.Should().NotBeNullOrEmpty();
     }

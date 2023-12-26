@@ -14,8 +14,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task GetCastingRoles_should_return_archive()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var results = await client.GetFromJsonAsync<IEnumerable<dynamic>>("api/roles");
         results.Should().NotBeNullOrEmpty();
     }
@@ -23,8 +22,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task Audition_should_return_NotFound_when_role_id_invalid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/200/audition/1", null);
         resp.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -32,8 +30,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task Audition_should_return_NotFound_when_unicorn_id_invalid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/1/audition/200", null);
         resp.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -41,8 +38,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task Audition_should_return_ok_when_input_valid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/1/audition/1", null);
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
     }
@@ -50,8 +46,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task Audition_should_return_ok_when_input_valid_and_request_replayed()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp1 = await client.PostAsync("api/roles/1/audition/1", null);
         resp1.StatusCode.Should().Be(HttpStatusCode.OK);
 
@@ -62,8 +57,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task SelectUnicorn_should_return_NotFound_when_role_id_invalid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/200/audition/1/select", null);
         resp.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -71,8 +65,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task SelectUnicorn_should_return_NotFound_when_unicorn_id_invalid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/1/audition/200/select", null);
         resp.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
@@ -80,8 +73,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task SelectUnicorn_should_return_ok_when_input_valid()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
 
         var auditionResp = await client.PostAsync("api/roles/1/audition/1", null);
         auditionResp.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -93,8 +85,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task SelectUnicorn_should_return_bad_request_when_another_unicorn_has_been_selected_already()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
 
         var auditionResp = await client.PostAsync("api/roles/1/audition/1", null);
         auditionResp.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -109,8 +100,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task SelectUnicorn_should_return_bad_request_when_unicorn_not_registered_for_audition()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
 
         var resp = await client.PostAsync("api/roles/1/audition/1/select", null);
         resp.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -119,8 +109,7 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     [Fact]
     public async Task Audition_should_return_bad_request_when_another_unicorn_has_been_selected_already()
     {
-        using var server = await _fixture.CreateServerAsync();
-        using var client = server.CreateClient();
+        using var client = await _fixture.CreateClientAsync();
 
         var auditionResp = await client.PostAsync("api/roles/1/audition/1", null);
         auditionResp.StatusCode.Should().Be(HttpStatusCode.OK);

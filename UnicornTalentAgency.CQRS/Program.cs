@@ -1,26 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using UnicornTalentAgency.CRUD.Persistence;
-using UnicornTalentAgency.CRUD.Routes;
-
-namespace UnicornTalentAgency.CRUD
+namespace UnicornTalentAgency.CQRS
 {
     public class Program
     {
         static void Main(string[] args)
         {
-
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
-            builder.Services.AddDbContextPool<UTADbContext>(options =>
-            {
-                var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
-                options.UseInMemoryDatabase(dbName);
-            });
 
             var app = builder.Build();
 
@@ -32,9 +21,6 @@ namespace UnicornTalentAgency.CRUD
             }
 
             app.UseHttpsRedirection();
-
-            app.MapUnicornRoutes()
-                .MapCastingRoleRoutes();
 
             app.Run();
         }
