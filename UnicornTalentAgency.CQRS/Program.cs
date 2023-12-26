@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using UnicornTalentAgency.CQRS.Routes;
+using UnicornTalentAgency.CQRS.Write;
+
 namespace UnicornTalentAgency.CQRS
 {
     public class Program
@@ -11,6 +15,16 @@ namespace UnicornTalentAgency.CQRS
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddMediatR(cfg =>{
+                cfg.RegisterServicesFromAssemblyContaining<Program>();
+            });
+
+            builder.Services.AddDbContextPool<WriteDbContext>(options =>
+            {
+                var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
+                options.UseInMemoryDatabase(dbName);
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -21,6 +35,9 @@ namespace UnicornTalentAgency.CQRS
             }
 
             app.UseHttpsRedirection();
+
+            app.MapUnicornRoutes()
+                .MapCastingRoleRoutes();
 
             app.Run();
         }

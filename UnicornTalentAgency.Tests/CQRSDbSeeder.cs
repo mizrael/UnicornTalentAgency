@@ -1,11 +1,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UnicornTalentAgency.CRUD.Persistence;
-using UnicornTalentAgency.CRUD.Persistence.Entities;
+using UnicornTalentAgency.CQRS.Write;
+using UnicornTalentAgency.CQRS.Write.Entities;
 
 namespace UnicornTalentAgency.Tests;
 
-internal static class DbSeeder
+internal static class CQRSDbSeeder
 {
     public static async ValueTask SeedAsync(IServiceProvider services)
     {
@@ -14,7 +14,7 @@ internal static class DbSeeder
         var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
         config["dbName"] = Guid.NewGuid().ToString();
 
-        var dbContext = scope.ServiceProvider.GetRequiredService<UTADbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
 
         AddUnicorns(dbContext);
         AddRoles(dbContext);
@@ -22,7 +22,7 @@ internal static class DbSeeder
         await dbContext.SaveChangesAsync();
     }
 
-    private static void AddRoles(UTADbContext dbContext)
+    private static void AddRoles(WriteDbContext dbContext)
     {
         dbContext.AddRange(new[]
         {
@@ -69,7 +69,7 @@ internal static class DbSeeder
         });
     }
 
-    private static void AddUnicorns(UTADbContext dbContext)
+    private static void AddUnicorns(WriteDbContext dbContext)
     {
         dbContext.AddRange(new[]
         {
