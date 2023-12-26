@@ -1,4 +1,3 @@
-using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace UnicornTalentAgency.Tests;
