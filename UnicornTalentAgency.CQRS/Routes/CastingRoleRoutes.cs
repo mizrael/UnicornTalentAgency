@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using UnicornTalentAgency.CQRS.Read.Queries;
 using UnicornTalentAgency.CQRS.Write.Commands;
 
 namespace UnicornTalentAgency.CQRS.Routes;
@@ -66,16 +67,20 @@ public static class CastingRoleRoutes
         return TypedResults.Ok();
     }
 
-    private static Task<CastingRoleArchiveDto[]> GetCastingRoles(
+    private static async Task<IEnumerable<CastingRoleArchive>> GetCastingRoles(
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken = default)
-    { throw new NotImplementedException(); }
+    { 
+        var results = await mediator.Send(new GetCastingRoleArchive(), cancellationToken);
+        return results ?? Enumerable.Empty<CastingRoleArchive>();
+    }
 
-    private static async Task<CastingRoleDetailsDto?> GetCastingRole(
+    private static async Task<CastingRoleDetails?> GetCastingRole(
         int id,
         [FromServices] IMediator mediator,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var results = await mediator.Send(new GetCastingRoleDetails(id), cancellationToken);
+        return results;
     }
 }

@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using UnicornTalentAgency.CQRS.Events;
+using UnicornTalentAgency.CQRS.Read;
 using UnicornTalentAgency.CQRS.Routes;
 using UnicornTalentAgency.CQRS.Write;
 
@@ -23,7 +25,13 @@ namespace UnicornTalentAgency.CQRS
             {
                 var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
                 options.UseInMemoryDatabase(dbName);
+            }).AddDbContextPool<ReadDbContext>(options =>
+            {
+                var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
+                options.UseInMemoryDatabase(dbName);
             });
+
+            builder.Services.AddTransient<ViewsRefresher>();
 
             var app = builder.Build();
 

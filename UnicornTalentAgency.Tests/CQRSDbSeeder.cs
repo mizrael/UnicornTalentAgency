@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using UnicornTalentAgency.CQRS.Events;
 using UnicornTalentAgency.CQRS.Write;
 using UnicornTalentAgency.CQRS.Write.Entities;
 
@@ -20,6 +21,9 @@ internal static class CQRSDbSeeder
         AddRoles(dbContext);
 
         await dbContext.SaveChangesAsync();
+
+        var viewsRefresher = scope.ServiceProvider.GetRequiredService<ViewsRefresher>();
+        await viewsRefresher.RefreshAll();
     }
 
     private static void AddRoles(WriteDbContext dbContext)

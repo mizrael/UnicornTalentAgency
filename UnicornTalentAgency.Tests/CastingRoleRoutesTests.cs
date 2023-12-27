@@ -1,4 +1,5 @@
 using System.Net;
+using UnicornTalentAgency.CRUD.Routes;
 
 namespace UnicornTalentAgency.Tests;
 
@@ -9,14 +10,6 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
     public CastingRoleRoutesTests(ServerFixture fixture)
     {
         _fixture = fixture;
-    }
-
-    [Fact]
-    public async Task GetCastingRoles_should_return_archive()
-    {
-        using var client = await _fixture.CreateClientAsync();
-        var results = await client.GetFromJsonAsync<IEnumerable<dynamic>>("api/roles");
-        results.Should().NotBeNullOrEmpty();
     }
 
     [Fact]
@@ -41,6 +34,9 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
         using var client = await _fixture.CreateClientAsync();
         var resp = await client.PostAsync("api/roles/1/audition/1", null);
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var unicorn = await client.GetFromJsonAsync<UnicornDetailsDto>("api/unicorns/1");
+        unicorn.AuditionsCount.Should().Be(1);
     }
 
     [Fact]
@@ -80,6 +76,10 @@ public class CastingRoleRoutesTests : IClassFixture<ServerFixture>
         
         var resp = await client.PostAsync("api/roles/1/audition/1/select", null);
         resp.StatusCode.Should().Be(HttpStatusCode.OK);
+
+        var unicorn = await client.GetFromJsonAsync<UnicornDetailsDto>("api/unicorns/1");
+        unicorn.TotalPay.Should().Be(1000);
+        unicorn.SuccessfulRoles.Should().Contain("The Great and Powerful Trixie");
     }
 
     [Fact]

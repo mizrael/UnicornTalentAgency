@@ -50,6 +50,7 @@ public static class UnicornRoutes
                     entity.Id,
                     entity.Name,
                     entity.MagicalAbilities,
+                    entity.Auditions.Count(),
                     successfulRoles?.Sum(a => a.Role.Pay) ?? 0,
                     successfulRoles?.Select(a => a.Role.Name).ToArray() ?? Array.Empty<string>()
                 );
