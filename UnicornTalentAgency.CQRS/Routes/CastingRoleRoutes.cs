@@ -1,8 +1,5 @@
-using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using UnicornTalentAgency.CQRS.Read.Queries;
-using UnicornTalentAgency.CQRS.Write.Commands;
+using System.Collections;
 
 namespace UnicornTalentAgency.CQRS.Routes;
 
@@ -26,61 +23,29 @@ public static class CastingRoleRoutes
     private static async Task<Results<NotFound<string>, BadRequest<string>, Ok>> Audition(
         int id,
         int unicornId,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await mediator.Send(new ApplyForAudition(unicornId, id), cancellationToken);
-        }
-        catch (ArgumentOutOfRangeException e)
-        {
-            return TypedResults.NotFound(e.Message);
-        }
-        catch (ArgumentException e)
-        {
-            return TypedResults.BadRequest(e.Message);
-        }
-
-        return TypedResults.Ok();
+        throw new NotImplementedException();
     }
 
     private static async Task<Results<NotFound<string>, BadRequest<string>, Ok>> SelectUnicorn(
         int id,
         int unicornId,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken = default)
     {
-        try
-        {
-            await mediator.Send(new SelectUnicornForRole(unicornId, id), cancellationToken);
-        }
-        catch (ArgumentOutOfRangeException e)
-        {
-            return TypedResults.NotFound(e.Message);
-        }
-        catch (ArgumentException e)
-        {
-            return TypedResults.BadRequest(e.Message);
-        }
-
-        return TypedResults.Ok();
+        throw new NotImplementedException();
     }
 
-    private static async Task<IEnumerable<CastingRoleArchive>> GetCastingRoles(
-        [FromServices] IMediator mediator,
+    private static async Task<IEnumerable> GetCastingRoles(        
         CancellationToken cancellationToken = default)
-    { 
-        var results = await mediator.Send(new GetCastingRoleArchive(), cancellationToken);
-        return results ?? Enumerable.Empty<CastingRoleArchive>();
+    {
+        throw new NotImplementedException();
     }
 
-    private static async Task<CastingRoleDetails?> GetCastingRole(
+    private static async Task GetCastingRole(
         int id,
-        [FromServices] IMediator mediator,
         CancellationToken cancellationToken = default)
     {
-        var results = await mediator.Send(new GetCastingRoleDetails(id), cancellationToken);
-        return results;
+        throw new NotImplementedException();
     }
 }

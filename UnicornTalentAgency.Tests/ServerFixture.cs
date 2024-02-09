@@ -30,9 +30,9 @@ public class ServerFixture : IAsyncLifetime
         var application = new WebApplicationFactory<T>();
         _instances.Add(application);
 
-        if(_isCQRS)
-            await CQRSDbSeeder.SeedAsync(application.Services);
-        else
+        //if(_isCQRS)
+        //    await CQRSDbSeeder.SeedAsync(application.Services);
+        //else
             await CrudDbSeeder.SeedAsync(application.Services);
 
         return application;

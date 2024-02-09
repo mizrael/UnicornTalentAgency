@@ -1,8 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using UnicornTalentAgency.CQRS.Events;
-using UnicornTalentAgency.CQRS.Read;
 using UnicornTalentAgency.CQRS.Routes;
-using UnicornTalentAgency.CQRS.Write;
 
 namespace UnicornTalentAgency.CQRS
 {
@@ -15,23 +11,7 @@ namespace UnicornTalentAgency.CQRS
             // Add services to the container.
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-
-            builder.Services.AddMediatR(cfg =>{
-                cfg.RegisterServicesFromAssemblyContaining<Program>();
-            });
-
-            builder.Services.AddDbContextPool<WriteDbContext>(options =>
-            {
-                var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
-                options.UseInMemoryDatabase(dbName);
-            }).AddDbContextPool<ReadDbContext>(options =>
-            {
-                var dbName = builder.Configuration["dbName"] ?? "unicorn-talent-agency";
-                options.UseInMemoryDatabase(dbName);
-            });
-
-            builder.Services.AddTransient<ViewsRefresher>();
+            builder.Services.AddSwaggerGen();         
 
             var app = builder.Build();
 
